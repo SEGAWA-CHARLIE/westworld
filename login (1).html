@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login and Registration</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background: #000;
+      color: #fff;
+    }
+
+    .container {
+      position: relative;
+      width: min(850px, 100%);
+      min-height: 550px;
+      background: #1a1a1a;
+      border: 2px solid #fff;
+      border-radius: 20px;
+      box-shadow: 0 0 25px #ff5f1f;
+      overflow: hidden;
+    }
+
+    .form-box, .info-box {
+      position: absolute;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 35px;
+      text-align: center;
+      transition: transform .6s ease, opacity .6s ease, filter .6s ease;
+    }
+
+    /* Login and registration forms sit on the RIGHT side */
+    .form-box { left: 50%; z-index: 2; }
+    .form-box.register {
+      left: 50%;
+      transform: translateX(110%);
+      opacity: 0;
+      filter: blur(8px);
+      pointer-events: none;
+    }
+
+    .container.active .form-box.login {
+      transform: translateX(110%);
+      opacity: 0;
+      filter: blur(8px);
+      pointer-events: none;
+    }
+
+    .container.active .form-box.register {
+      transform: translateX(0);
+      opacity: 1;
+      filter: blur(0);
+      pointer-events: auto;
+    }
+
+    .form-box form { width: 100%; max-width: 330px; }
+    h2 { font-size: 30px; margin-bottom: 24px; }
+    .input-box { position: relative; width: 100%; margin: 22px 0; }
+    .input-box input {
+      width: 100%;
+      padding: 14px 16px;
+      background: transparent;
+      border: 2px solid #ff5f1f;
+      border-radius: 8px;
+      outline: none;
+      color: #fff;
+      font-size: 16px;
+    }
+    .input-box label {
+      display: block;
+      text-align: left;
+      margin: 0 0 7px 2px;
+      color: #ddd;
+      font-size: 14px;
+    }
+    .btn {
+      width: 100%;
+      min-height: 45px;
+      background: #ff5f1f;
+      border: 0;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 700;
+      color: #000;
+      margin-top: 8px;
+    }
+    .btn:hover { box-shadow: 0 0 12px #ff5f1f; }
+    .toggle-text { margin-top: 20px; font-size: 14px; }
+    a { color: #ff8c42; text-decoration: none; font-weight: 700; }
+    a:hover { text-decoration: underline; }
+
+    /* Welcome/information panels sit on the LEFT side */
+    .info-box {
+      left: 0;
+      z-index: 1;
+      background: linear-gradient(45deg, #ff5f1f, #ff8c42);
+      color: #000;
+    }
+    .info-box h2 { font-size: 32px; }
+    .info-box p { line-height: 1.6; }
+    .info-box.register-info {
+      left: 0;
+      transform: translateX(-110%);
+      opacity: 0;
+    }
+    .container.active .info-box.login-info {
+      transform: translateX(-110%);
+      opacity: 0;
+    }
+    .container.active .info-box.register-info {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 650px) {
+      body { padding: 12px; }
+      .container { min-height: 650px; }
+      .form-box, .info-box { width: 100%; height: 50%; left: 0; }
+      .form-box { top: 0; }
+      .form-box.register { top: 0; transform: translateY(110%); }
+      .container.active .form-box.login { transform: translateY(-110%); }
+      .container.active .form-box.register { transform: translateY(0); }
+      .info-box { top: 50%; left: 0; }
+      .info-box.register-info { top: 50%; transform: translateY(110%); }
+      .container.active .info-box.login-info { transform: translateY(110%); }
+      .container.active .info-box.register-info { transform: translateY(0); }
+      h2 { font-size: 25px; margin-bottom: 14px; }
+      .input-box { margin: 13px 0; }
+      .info-box p { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="container" id="container">
+    <section class="form-box login">
+      <form id="loginForm">
+        <h2>Login</h2>
+        <div class="input-box">
+          <label for="loginUsername">Username</label>
+          <input type="text" id="loginUsername" autocomplete="username" required>
+        </div>
+        <div class="input-box">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" autocomplete="current-password" required>
+        </div>
+        <button type="submit" class="btn">Login</button>
+        <p class="toggle-text">Don't have an account? <a href="#" id="showRegister">Register</a></p>
+      </form>
+    </section>
+
+    <section class="form-box register">
+      <form id="registerForm">
+        <h2>Create Account</h2>
+        <div class="input-box">
+          <label for="registerUsername">Username</label>
+          <input type="text" id="registerUsername" autocomplete="username" required>
+        </div>
+        <div class="input-box">
+          <label for="registerEmail">Email</label>
+          <input type="email" id="registerEmail" autocomplete="email" required>
+        </div>
+        <div class="input-box">
+          <label for="registerPassword">Password</label>
+          <input type="password" id="registerPassword" autocomplete="new-password" minlength="6" required>
+        </div>
+        <button type="submit" class="btn">Create Account</button>
+        <p class="toggle-text">Already have an account? <a href="#" id="showLogin">Login</a></p>
+      </form>
+    </section>
+
+    <section class="info-box login-info">
+      <h2>WELCOME BACK</h2>
+      <p>We're delighted to have you here. Please log in to continue.</p>
+    </section>
+    <section class="info-box register-info">
+      <h2>HELLO!</h2>
+      <p>Create an account to get started with us.</p>
+    </section>
+  </main>
+
+  <script>
+    const container = document.getElementById('container');
+
+    document.getElementById('showRegister').addEventListener('click', function (event) {
+      event.preventDefault();
+      container.classList.add('active');
+    });
+
+    document.getElementById('showLogin').addEventListener('click', function (event) {
+      event.preventDefault();
+      container.classList.remove('active');
+    });
+
+    document.getElementById('registerForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const username = document.getElementById('registerUsername').value.trim();
+      const email = document.getElementById('registerEmail').value.trim();
+      const password = document.getElementById('registerPassword').value;
+
+      if (!username || !email || password.length < 6) {
+        alert('Please complete all fields. Password must be at least 6 characters.');
+        return;
+      }
+
+      // Demo only: localStorage is not secure for real user accounts.
+      const account = { username, email, password };
+      localStorage.setItem('demoAccount', JSON.stringify(account));
+
+      alert('Account created. You can now log in.');
+      this.reset();
+      container.classList.remove('active');
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const savedAccount = localStorage.getItem('demoAccount');
+
+      if (!savedAccount) {
+        alert('No demo account found. Please register first.');
+        return;
+      }
+
+      const account = JSON.parse(savedAccount);
+      if (username === account.username && password === account.password) {
+        alert('Login successful!');
+        // Change home.html to the correct page on your website.
+        window.location.href = 'home.html';
+      } else {
+        alert('Incorrect username or password.');
+      }
+    });
+  </script>
+</body>
+</html>
